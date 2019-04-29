@@ -7,7 +7,7 @@ module.exports = {
     connection: {
       filename: './data/AtoZBuild.db3'
     },
-    userNullAsDefault: true,
+    useNullAsDefault: true,
     migrations: {
       directory: './data/migrations'
     },

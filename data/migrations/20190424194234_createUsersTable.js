@@ -19,7 +19,6 @@ exports.up = function(knex, Promise) {
       users
           .string('users_password')
           .notNullable();
-      users.timestamp('createdAt').defaultTo(knex.fn.now());
     })
   
   };
