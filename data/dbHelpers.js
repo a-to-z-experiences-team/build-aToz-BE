@@ -8,7 +8,8 @@ module.exports = {
     findExpereinces,
     addUser,
     findUserById,
-    findExpById
+    findExpById,
+    getAllUsers
 }
 
 
@@ -42,6 +43,9 @@ module.exports = {
     async function addUser(user) {
         const [id] = await db('users').insert(user)
 
-        return findById(id)
+        return findUserById(id)
     }
     
+    async function getAllUsers() {
+        return db('users');
+    }
