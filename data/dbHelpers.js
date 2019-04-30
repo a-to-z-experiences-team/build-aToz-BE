@@ -7,7 +7,8 @@ const db = knex(dbConfig.development);
 module.exports = {
     findExpereinces,
     addUser,
-    findById
+    findUserById,
+    findExpById
 }
 
 
@@ -24,12 +25,20 @@ module.exports = {
                 )
     }
     
-    function findById(id) {
+    function findUserById(id) {
         return db('users')
         .where({ id })
         .first();
     }
   
+    function findExpById(id) {
+        return db('experiences')
+        .where({ id })
+        .first();
+    
+    }
+  
+
     async function addUser(user) {
         const [id] = await db('users').insert(user)
 

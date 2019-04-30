@@ -28,4 +28,17 @@ router.post('/signup', async(req, res) => {
     }
 })
 
+router.get('/experiences/:id', async(req,res) => {
+    try {
+        // console.log(req.params.id)
+        const exp = await db.findExpById(req.params.id)
+        res.status(200).json(exp);
+    } catch(error) {
+        console.log(error)
+        res.status(500).json({
+            message: "Cannot find experience"
+        })
+    }
+})
+
 module.exports = router;
