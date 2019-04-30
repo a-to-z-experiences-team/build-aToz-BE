@@ -8,8 +8,6 @@ exports.seed = function(knex, Promise) {
         {exp_type: 'outdoors'},
         {exp_type: 'recreational'},
         {exp_type: 'indoors'},
-
-
       ]);
     });
 };
