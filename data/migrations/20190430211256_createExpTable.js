@@ -16,9 +16,12 @@ exports.up = function(knex, Promise) {
           .timestamp('createdAt').default(knex.fn.now());
   
       exp
+        .string('startsOn')
+        .notNullable()
+
+      exp
           .string('location')
-          .notNullable()
-          .unique();
+          .notNullable();
       exp
           .string('exp_type')
           .unsigned()
