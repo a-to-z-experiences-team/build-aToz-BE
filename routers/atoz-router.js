@@ -1,11 +1,10 @@
 const express = require('express');
-const bcrypt = require('bcryptjs');
+
 const db = require('../data/dbHelpers.js');
 
 const router = express.Router();
 
-
-
+//home page routre
 router.get('/home', async (req, res) => {
     try {
         const exp = await db.findExpereinces(req.query)
@@ -15,37 +14,8 @@ router.get('/home', async (req, res) => {
     }
 })
 
-// router.post('/signup', async(req, res) => {
-//     try {
-//         // console.log(req.body)
-//         const user = await db.addUser(newUser);
-//         res.status(200).json(user);
-//     } catch(error) {
-//         res.status(404).json({
-//             error,
-//             message: 'Error adding user'
-//         })
-//     }
-// })
 
-router.post('/signup', (req, res) => {
-    let user = req.body;
-
-    const hash = bcrypt.hashSync(user.users_password);
-    user.users_password = hash;
-
-    db.addUser(user)
-        .then(saved => {
-            res.status(201).json(saved)
-        })
-        .catch(error => {
-            console.log(error)
-            res.status(500).json({
-                message: "error saving user"
-            })
-        })
-})
-
+//get experiences by ID
 router.get('/experiences/:id', async(req,res) => {
     try {
         // console.log(req.params.id)
@@ -59,6 +29,8 @@ router.get('/experiences/:id', async(req,res) => {
     }
 })
 
+
+//get all users
 router.get('/users/all', async(req,res) => {
     try {
         const users = await db.getAllUsers();
@@ -66,6 +38,36 @@ router.get('/users/all', async(req,res) => {
     } catch(error) {
         res.status(500).json({
             message: "error in server"
+        })
+    }
+})
+
+
+//get experiences by creator ID
+router.get('/experiencesby/:id', async(req, res) => {
+    try {
+        const exp = await db.getAllExpByUserId(req.params.id);
+        res.status(200).json(exp);
+    } catch(error) {
+        res.status(500).json({
+            message: 'unable to fetch experiences'
+        })
+    }
+})
+
+//post an experience
+router.post('/:id/experience', async (req, res) => {
+    const mainInfo = { ...req.body, createdBy: req.params.id };
+
+    // console.log(mainInfo)
+    try {
+        const exp = await db.addExp(mainInfo);
+        console.log(exp)
+        res.status(200).json(exp);
+    } catch(error) {
+        console.log(error)
+        res.status(500).json({
+            message: 'Error adding an experience'
         })
     }
 })
