@@ -7,12 +7,16 @@ const db = knex(dbConfig.development);
 module.exports = {
     findExpereinces,
     addUser,
+    updateUser,
     findUserById,
     findExpById,
     getAllUsers,
     getAllExpByUserId,
     findBy,
-    addExp
+    addExp,
+    updateExp,
+    removeUser,
+    removeExp
 }
 
     //users modules
@@ -40,6 +44,21 @@ module.exports = {
         return db('users').where(filter)
     }
 
+
+    
+    //edit users info
+    function updateUser(id, changes) {
+        return db('users')
+        .where({ id })
+        .update( changes, '*')
+    }
+
+    //delete users
+    function removeUser(id) {
+        return db('users')
+        .where({ id })
+        .del();
+    }
     // ------------------------------------------------------------------
 
     //all experiences modules
@@ -48,6 +67,7 @@ module.exports = {
         return db('experiences')
             .innerJoin('users', 'createdBy', 'users.id')
             .select(
+                'experiences.id',
                 'exp_title',
                 'exp_desc',
                 'users.users_username as created by',
@@ -84,4 +104,18 @@ module.exports = {
         const [id] = await db('experiences').insert(exp);
         
         return findExpById(id)
+    }
+
+    //edit exp info
+    function updateExp(id, changes) {
+        return db('experiences')
+        .where({ id })
+        .update( changes, '*')
+    }
+
+    //delete exp
+    function removeExp(id) {
+        return db('experiences')
+        .where({ id })
+        .del();
     }

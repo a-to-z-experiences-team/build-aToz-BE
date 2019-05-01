@@ -3,7 +3,6 @@ const express = require('express');
 const configureMiddleware = require('./middleware.js');
 
 const server = express();
-
 configureMiddleware(server);
 
 

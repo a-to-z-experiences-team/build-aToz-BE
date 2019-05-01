@@ -4,7 +4,7 @@ const db = require('../data/dbHelpers.js');
 
 const router = express.Router();
 
-//home page routre
+//home page route
 router.get('/home', async (req, res) => {
     try {
         const exp = await db.findExpereinces(req.query)
@@ -42,7 +42,26 @@ router.get('/users/all', async(req,res) => {
     }
 })
 
-
+//delete user 
+router.delete('/:id', async(req, res) => {
+    try {
+        const user = await db.removeUser(req.params.id);
+        if(user) {
+            res.status(200).json({
+                message: 'user has been deleted'
+            })
+        } else {
+            res.status(404).json({
+                message: 'could not find user'
+            })
+        }
+    } catch(error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'Error removing user'
+        })
+    }
+})
 //get experiences by creator ID
 router.get('/experiencesby/:id', async(req, res) => {
     try {
@@ -71,5 +90,48 @@ router.post('/:id/experience', async (req, res) => {
         })
     }
 })
+
+
+//edit an experience
+router.put('/:id/editexperience', async (req, res) => {
+    console.log(req.params.id, req.body)
+    try {
+        const editExp = await db.updateExp(req.params.id, req.body);
+        if(editExp) {
+            res.status(200).json(editExp);
+        } else {
+            res.status(404).json({
+                message: 'unable to find experience to edit'
+            })
+        }
+    } catch(error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'Error updating experience'
+        })
+    }
+})
+
+//delete an exp
+router.delete('/exp/:id', async(req, res) => {
+    try {
+        const exp = await db.removeExp(req.params.id);
+        if(exp) {
+            res.status(200).json({
+                message: 'exp has been deleted'
+            })
+        } else {
+            res.status(404).json({
+                message: 'could not find exp'
+            })
+        }
+    } catch(error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'Error removing exp'
+        })
+    }
+})
+
 
 module.exports = router;

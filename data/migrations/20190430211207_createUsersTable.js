@@ -17,6 +17,11 @@ exports.up = function(knex, Promise) {
           .unique();
   
       users
+        .string('users_email')
+        .notNullable()
+        .unique();
+
+      users
           .string('users_password')
           .notNullable();
     })
