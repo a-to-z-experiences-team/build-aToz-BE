@@ -2,16 +2,14 @@ const router = require('express').Router();
 
 const bcrypt = require('bcryptjs');
 
-const jwt = require('jsonwebtoken');
-
 const db = require('../data/dbHelpers.js');
 
-const { jwtSecret } = require('../config/secrets.js');
+const { generateToken } = require('../auth/restricted-middleware.js')
 
 router.post('/register', (req, res) => {
 
     let user = req.body;
-    console.log(user)
+    // console.log(user)
     const hash = bcrypt.hashSync(user.users_password);
     user.users_password = hash;
 
@@ -73,19 +71,5 @@ router.put('/user/:id', async (req, res) => {
         })
     }
 })
-
-function generateToken(user) {
-    const payload = {
-        subject:user.id,
-        username: user.username
-    }
-
-    const options = {
-        expiresIn: '1d'
-    }
-
-    return jwt.sign(payload, jwtSecret, options)
-}
-
 
 module.exports = router;
