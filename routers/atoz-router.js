@@ -5,7 +5,7 @@ const db = require('../data/dbHelpers.js');
 const router = express.Router();
 const { authenticate } = require('../auth/restricted-middleware.js')
 
-//home page route
+//home page route for all exp
 router.get('/home', async (req, res) => {
     try {
         const exp = await db.findExpereinces(req.query)
@@ -16,7 +16,7 @@ router.get('/home', async (req, res) => {
 })
 
 
-//get experiences by ID
+//find experiences by ID
 router.get('/experiences/:id', async(req,res) => {
     try {
         // console.log(req.params.id)
@@ -39,6 +39,21 @@ router.get('/users/all', async(req,res) => {
     } catch(error) {
         res.status(500).json({
             message: "error in server"
+        })
+    }
+})
+
+
+//find one user
+router.get('/users/:id', authenticate, async(req,res) => {
+    const userId = req.decodedjwt.subject
+
+    try{
+        const user = await db.findUserById(userId)
+        res.status(200).json(user)
+    } catch(error) {
+        res.status(500).json({
+            message: 'cannot find user'
         })
     }
 })
