@@ -81,7 +81,7 @@ router.post('/:id/experience', async (req, res) => {
     // console.log(mainInfo)
     try {
         const exp = await db.addExp(mainInfo);
-        console.log(exp)
+        // console.log(exp)
         res.status(200).json(exp);
     } catch(error) {
         console.log(error)
