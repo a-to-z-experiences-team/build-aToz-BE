@@ -45,7 +45,7 @@ router.get('/users/all', async(req,res) => {
 
 
 //find one user
-router.get('/users/:id', authenticate, async(req,res) => {
+router.get('/users/:id', async(req,res) => {
     const userId = req.decodedjwt.subject
 
     try{
@@ -126,7 +126,7 @@ router.put('/:id/editexperience', async (req, res) => {
 })
 
 //delete an exp
-router.delete('/exp/:id', authenticate, async(req, res) => {
+router.delete('/exp/:id', async(req, res) => {
     try {
         const userId = req.decodedjwt.subject
         const user = await db.findUserById(userId)

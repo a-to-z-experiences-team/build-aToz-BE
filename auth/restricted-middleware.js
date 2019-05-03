@@ -13,7 +13,7 @@ function authenticate(req,res,next) {
     if(token) {
         jwt.verify(token, jwtSecret, (err, decodedToken) => {
             if(err) {
-                res.status(401).json({
+                res.status(407).json({
                     err: 'user not verified'
                 })
             } else {
