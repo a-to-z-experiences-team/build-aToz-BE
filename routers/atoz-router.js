@@ -135,7 +135,8 @@ router.delete('/exp/:id', async(req, res) => {
         const createdBy = Number(event.createdBy)
 
         if(user.id === createdBy) {
-            res.status(200).json({
+            const deleted = await db.removeExp(event.id)
+            res.status(200).json({deleted,
                 message: 'exp has been deleted'
             })
         } else {
