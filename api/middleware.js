@@ -7,7 +7,7 @@ const logger = require('morgan')
 
 
 const logMiddleware = logger('dev')
-const restricted = require('../auth/restricted-middleware.js')
+const { authenticate } = require('../auth/restricted-middleware.js')
 const atozRouter = require('../routers/atoz-router.js');
 
 module.exports = server => {
@@ -17,5 +17,5 @@ module.exports = server => {
   server.use(logMiddleware)
   
   server.use('/api/atoz/auth', atozAuthRouter )
-  server.use('/api/atoz', restricted, atozRouter)
+  server.use('/api/atoz', authenticate, atozRouter)
 };

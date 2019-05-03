@@ -1,11 +1,13 @@
-// const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
-// const db = require('../data/dbHelpers.js');
 
 const { jwtSecret } = require('../config/secrets.js');
 
-module.exports = (req, res, next) => {
+module.exports = {
+    authenticate,
+    generateToken
+}
+
+function authenticate(req,res,next) {
     const token = req.headers.authorization;
 
     if(token) {
@@ -15,7 +17,9 @@ module.exports = (req, res, next) => {
                     err: 'user not verified'
                 })
             } else {
+                // console.log(decodedToken.subject)
                 req.decodedjwt = decodedToken;
+
                 next();
             }
         })
@@ -24,4 +28,18 @@ module.exports = (req, res, next) => {
             err: "user not verified"
         })
     }
+}
+
+
+function generateToken(user) {
+    const payload = {
+        subject:user.id,
+        username: user.username
+    }
+
+    const options = {
+        expiresIn: '1d'
+    }
+
+    return jwt.sign(payload, jwtSecret, options)
 }

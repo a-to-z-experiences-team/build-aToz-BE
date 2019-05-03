@@ -3,8 +3,9 @@ const express = require('express');
 const db = require('../data/dbHelpers.js');
 
 const router = express.Router();
+const { authenticate } = require('../auth/restricted-middleware.js')
 
-//home page route
+//home page route for all exp
 router.get('/home', async (req, res) => {
     try {
         const exp = await db.findExpereinces(req.query)
@@ -15,7 +16,7 @@ router.get('/home', async (req, res) => {
 })
 
 
-//get experiences by ID
+//find experiences by ID
 router.get('/experiences/:id', async(req,res) => {
     try {
         // console.log(req.params.id)
@@ -38,6 +39,21 @@ router.get('/users/all', async(req,res) => {
     } catch(error) {
         res.status(500).json({
             message: "error in server"
+        })
+    }
+})
+
+
+//find one user
+router.get('/users/:id', authenticate, async(req,res) => {
+    const userId = req.decodedjwt.subject
+
+    try{
+        const user = await db.findUserById(userId)
+        res.status(200).json(user)
+    } catch(error) {
+        res.status(500).json({
+            message: 'cannot find user'
         })
     }
 })
@@ -75,10 +91,8 @@ router.get('/experiencesby/:id', async(req, res) => {
 })
 
 //post an experience
-router.post('/:id/experience', async (req, res) => {
-    const mainInfo = { ...req.body, createdBy: req.params.id };
-
-    // console.log(mainInfo)
+router.post('/experience', async (req, res) => {
+    const mainInfo = { ...req.body, createdBy: req.decodedjwt.subject };
     try {
         const exp = await db.addExp(mainInfo);
         // console.log(exp)
@@ -94,7 +108,6 @@ router.post('/:id/experience', async (req, res) => {
 
 //edit an experience
 router.put('/:id/editexperience', async (req, res) => {
-    console.log(req.params.id, req.body)
     try {
         const editExp = await db.updateExp(req.params.id, req.body);
         if(editExp) {
@@ -113,16 +126,21 @@ router.put('/:id/editexperience', async (req, res) => {
 })
 
 //delete an exp
-router.delete('/exp/:id', async(req, res) => {
+router.delete('/exp/:id', authenticate, async(req, res) => {
     try {
-        const exp = await db.removeExp(req.params.id);
-        if(exp) {
+        const userId = req.decodedjwt.subject
+        const user = await db.findUserById(userId)
+        const event = await db.findExpById(req.params.id)
+
+        const createdBy = Number(event.createdBy)
+
+        if(user.id === createdBy) {
             res.status(200).json({
                 message: 'exp has been deleted'
             })
         } else {
             res.status(404).json({
-                message: 'could not find exp'
+                message: 'you are not the origional creator!'
             })
         }
     } catch(error) {
