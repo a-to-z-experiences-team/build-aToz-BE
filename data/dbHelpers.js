@@ -116,6 +116,6 @@ module.exports = {
     //delete exp
     function removeExp(id) {
         return db('experiences')
-        .where({ id })
+        .where('id', id )
         .del();
     }
