@@ -91,7 +91,7 @@ router.get('/experiencesby/:id', async(req, res) => {
 })
 
 //post an experience
-router.post('/experience', authenticate, async (req, res) => {
+router.post('/experience', async (req, res) => {
     const mainInfo = { ...req.body, createdBy: req.decodedjwt.subject };
     try {
         const exp = await db.addExp(mainInfo);
