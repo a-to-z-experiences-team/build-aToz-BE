@@ -131,12 +131,12 @@ router.delete('/exp/:id', async(req, res) => {
         const userId = req.decodedjwt.subject
         const user = await db.findUserById(userId)
         const event = await db.findExpById(req.params.id)
-
         const createdBy = Number(event.createdBy)
-
+        
         if(user.id === createdBy) {
-            const deleted = await db.removeExp(event.id)
-            res.status(200).json({deleted,
+            await db.removeExp(event.id)
+            const allevents = await db.findExpereinces()
+            res.status(200).json({allevents,
                 message: 'exp has been deleted'
             })
         } else {

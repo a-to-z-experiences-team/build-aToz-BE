@@ -114,8 +114,9 @@ module.exports = {
     }
 
     //delete exp
-    function removeExp(id) {
+    async function removeExp(id) {
+        // const exp = await db('experiences').del(id)
         return db('experiences')
-        .where('id', id )
+        .where({id})
         .del();
     }
