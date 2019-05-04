@@ -3,7 +3,7 @@ const express = require('express');
 const db = require('../data/dbHelpers.js');
 
 const router = express.Router();
-const { authenticate } = require('../auth/restricted-middleware.js')
+// const { authenticate } = require('../auth/restricted-middleware.js')
 
 //home page route for all exp
 router.get('/home', async (req, res) => {
@@ -58,6 +58,31 @@ router.get('/users/:id', async(req,res) => {
     }
 })
 
+//edit user
+router.put('/user/:id', async (req, res) => {
+    try {
+        //puts decoded token id in userId
+        const userId = req.decodedjwt.subject
+
+        //then searches for user in db using token
+        const user = await db.findUserById(userId)
+
+        if(userId === user.id) {
+            const editUser = await db.updateUser(req.params.id, req.body);
+            res.status(200).json(editUser);
+        } else {
+            res.status(404).json({
+                message: "User could not be found"
+            })
+        }
+    } catch(error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'Error updating user'
+        })
+    }
+})
+
 //delete user 
 router.delete('/:id', async(req, res) => {
     try {
@@ -78,6 +103,7 @@ router.delete('/:id', async(req, res) => {
         })
     }
 })
+
 //get experiences by creator ID
 router.get('/experiencesby/:id', async(req, res) => {
     try {
@@ -111,10 +137,13 @@ router.put('/:id/editexperience', async (req, res) => {
     try {
         //puts decoded token in userId
         const userId = req.decodedjwt.subject
+
         //then searches for user in db using token
         const user = await db.findUserById(userId)
+
         //then finds event from :id
         const event = await db.findExpById(req.params.id)
+
         //changes decoded token into a integer
         const createdBy = Number(event.createdBy)
 
