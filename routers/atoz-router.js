@@ -109,12 +109,23 @@ router.post('/experience', async (req, res) => {
 //edit an experience
 router.put('/:id/editexperience', async (req, res) => {
     try {
-        const editExp = await db.updateExp(req.params.id, req.body);
-        if(editExp) {
-            res.status(200).json(editExp);
+        //puts decoded token in userId
+        const userId = req.decodedjwt.subject
+        //then searches for user in db using token
+        const user = await db.findUserById(userId)
+        //then finds event from :id
+        const event = await db.findExpById(req.params.id)
+        //changes decoded token into a integer
+        const createdBy = Number(event.createdBy)
+
+        //if user token and created by matches then runs edit
+        if(user.id === createdBy) {
+            await db.updateExp(req.params.id, req.body);
+            const allevents = await db.findExpereinces()
+            res.status(200).json({allevents, message: `event ${event.id} has been edited successfully`});
         } else {
             res.status(404).json({
-                message: 'unable to find experience to edit'
+                message: 'not the origional creator'
             })
         }
     } catch(error) {
@@ -137,7 +148,7 @@ router.delete('/exp/:id', async(req, res) => {
             await db.removeExp(event.id)
             const allevents = await db.findExpereinces()
             res.status(200).json({allevents,
-                message: 'exp has been deleted'
+                message: `exp ${event.id} has been deleted`
             })
         } else {
             res.status(404).json({
