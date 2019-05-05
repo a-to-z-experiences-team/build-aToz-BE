@@ -5,9 +5,7 @@ exports.up = function(knex, Promise) {
   
       exp
           .string('exp_title')
-          .notNullable()
-          .unique();
-  
+          .notNullable();  
       exp
           .string('exp_desc')
           .notNullable()
