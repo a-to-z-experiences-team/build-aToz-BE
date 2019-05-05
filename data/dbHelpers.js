@@ -1,8 +1,14 @@
+require('dotenv').config();
+
 const knex = require('knex');
 
 const dbConfig = require('../knexfile.js');
 
 const db = knex(dbConfig.development);
+
+// const dbEnv = process.env-DB_ENV || 'development';
+
+
 
 module.exports = {
     findExpereinces,
@@ -100,10 +106,12 @@ module.exports = {
         .where({ createdBy: id })
     }
 
+    //add exp
     async function addExp(exp) {
         const [id] = await db('experiences').insert(exp);
         
         return findExpById(id)
+        // return db('experiences').where({id}).first();
     }
 
     //edit exp info

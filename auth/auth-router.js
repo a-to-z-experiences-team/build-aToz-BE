@@ -54,22 +54,22 @@ router.post('/login', (req, res) => {
 })
 
 
-router.put('/user/:id', async (req, res) => {
-    try {
-        const editUser = await db.updateUser(req.params.id, req.body);
-        if(editUser) {
-            res.status(200).json(editUser);
-        } else {
-            res.status(404).json({
-                message: "User could not be found"
-            })
-        }
-    } catch(error) {
-        console.log(error);
-        res.status(500).json({
-            message: 'Error updating user'
-        })
-    }
-})
+// router.put('/user/:id', async (req, res) => {
+//     try {
+//         const editUser = await db.updateUser(req.params.id, req.body);
+//         if(editUser) {
+//             res.status(200).json(editUser);
+//         } else {
+//             res.status(404).json({
+//                 message: "User could not be found"
+//             })
+//         }
+//     } catch(error) {
+//         console.log(error);
+//         res.status(500).json({
+//             message: 'Error updating user'
+//         })
+//     }
+// })
 
 module.exports = router;
