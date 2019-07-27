@@ -96,10 +96,10 @@ module.exports = {
         return db('experiences')
         .innerJoin('users', 'createdBy', 'users.id')
         .select(
-            'id',
+            'exp.id',
             'exp_title',
             'exp_desc',
-            'users.users_username as created by',
+            'users.users_username as createdBy',
             'startsOn',
             'location',
             'maxGuests'
