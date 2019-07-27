@@ -94,16 +94,16 @@ module.exports = {
     //find experience filtered by the creators ID
     async function getAllExpByUserId(id) {
         return db('experiences')
-        .innerJoin('users', 'createdBy', 'users.id')
-        .select(
-            'exp.id',
-            'exp_title',
-            'exp_desc',
-            'users.users_username as created by',
-            'startsOn',
-            'location',
-            'maxGuests'
-            )
+        // .innerJoin('users', 'createdBy', 'users.id')
+        // .select(
+        //     'id',
+        //     'exp_title',
+        //     'exp_desc',
+        //     'users.users_username as created by',
+        //     'startsOn',
+        //     'location',
+        //     'maxGuests'
+        //     )
         .where({ createdBy: id })
     }
 
