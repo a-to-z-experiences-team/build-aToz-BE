@@ -99,7 +99,7 @@ module.exports = {
             'exp.id',
             'exp_title',
             'exp_desc',
-            'users.users_username as createdBy',
+            'users.users_username as created by',
             'startsOn',
             'location',
             'maxGuests'
