@@ -96,6 +96,7 @@ module.exports = {
         return db('experiences')
         .innerJoin('users', 'createdBy', 'users.id')
         .select(
+            'exp.id',
             'exp_title',
             'exp_desc',
             'users.users_username as created by',
