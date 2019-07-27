@@ -101,7 +101,7 @@ module.exports = {
             'exp_desc',
             'users.users_username as created by',
             'startsOn',
-            'location',
+            // 'location',
             'maxGuests'
             )
         .where({ createdBy: id })
