@@ -20,7 +20,7 @@ router.get('/home', async (req, res) => {
 router.get('/experiences/:id', async(req,res) => {
     try {
         // console.log(req.params.id)
-        const exp = await db.getAllExpByUserId(req.params.id)
+        const exp = await db.findExpereinces(req.params.id)
         res.status(200).json(exp);
     } catch(error) {
         console.log(error)
