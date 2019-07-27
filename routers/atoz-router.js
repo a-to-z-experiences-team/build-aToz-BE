@@ -20,7 +20,7 @@ router.get('/home', async (req, res) => {
 router.get('/experiences/:id', async(req,res) => {
     try {
         // console.log(req.params.id)
-        const exp = await db.findExpereinces(req.params.id)
+        const exp = await db.findExpById(req.params.id)
         res.status(200).json(exp);
     } catch(error) {
         console.log(error)
@@ -107,7 +107,7 @@ router.delete('/:id', async(req, res) => {
 //get experiences by creator ID
 router.get('/experiencesby/:id', async(req, res) => {
     try {
-        const exp = await db.findExpereinces(req.params.id);
+        const exp = await db.getAllExpByUserId(req.params.id);
         res.status(200).json(exp);
     } catch(error) {
         res.status(500).json({
